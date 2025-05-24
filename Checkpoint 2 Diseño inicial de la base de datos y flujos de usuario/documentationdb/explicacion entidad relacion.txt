@@ -1,0 +1,77 @@
+Explicación de las entidades y relaciones
+1. Tabla users (Usuarios)
+Atributos:
+
+id: Clave primaria (autoincremental).
+
+username: Nombre único de usuario.
+
+password: Contraseña (debe almacenarse encriptada en producción).
+
+email: Correo electrónico único.
+
+created_at: Fecha de registro.
+
+2. Tabla food_stands (Puestos de comida)
+Atributos:
+
+id: Clave primaria.
+
+name: Nombre del puesto.
+
+description: Descripción/reseña breve.
+
+latitude/longitude: Coordenadas GPS.
+
+photo_path: Ruta de la imagen.
+
+user_creator: Clave foránea a users.username (quien creó el puesto).
+
+created_at: Fecha de registro.
+
+3. Tabla reviews (Reseñas)
+Atributos:
+
+id: Clave primaria.
+
+stand_id: Clave foránea a food_stands.id.
+
+user_id: Clave foránea a users.id (autor de la reseña).
+
+rating: Calificación (1-5 estrellas).
+
+comment: Texto de la reseña.
+
+created_at: Fecha de publicación.
+
+Relaciones
+users → food_stands (1:N):
+
+Un usuario puede crear múltiples puestos.
+
+Clave foránea: food_stands.user_creator.
+
+users → reviews (1:N):
+
+Un usuario puede escribir múltiples reseñas.
+
+Clave foránea: reviews.user_id.
+
+food_stands → reviews (1:N):
+
+Un puesto puede tener múltiples reseñas.
+
+Clave foránea: reviews.stand_id (con ON DELETE CASCADE para eliminar reseñas si se borra el puesto).
+
+Reglas de Integridad
+Unicidad:
+
+users.username y users.email deben ser únicos.
+
+No puede haber reseñas duplicadas de un mismo usuario para un puesto (podrías añadir UNIQUE(stand_id, user_id) en reviews si es necesario).
+
+Restricciones:
+
+reviews.rating debe estar entre 1 y 5.
+
+food_stands.latitude y longitude deben ser valores válidos (-90 a 90, -180 a 180).
